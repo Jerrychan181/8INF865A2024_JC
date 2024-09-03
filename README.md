@@ -1,2 +1,3 @@
 # 8INF865A2024_JC
 exercice1
+Jerry CHAN
