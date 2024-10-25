@@ -83,6 +83,7 @@ fun GameScreen( gameViewModel: GameViewModel = viewModel()) {
             onUserGuessChanged = { gameViewModel.updateUserGuess(it) },
             onKeyboardDone = { gameViewModel.checkUserGuess() },
             isGuessWrong = gameUiState.isGuessedWordWrong,
+            wordCount = gameUiState.currentWordCount,
         )
         Column(
             modifier = Modifier
@@ -107,7 +108,7 @@ fun GameScreen( gameViewModel: GameViewModel = viewModel()) {
             }
 
             OutlinedButton(
-                onClick = { },
+                onClick = {gameViewModel.skipWord()  },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
@@ -117,7 +118,7 @@ fun GameScreen( gameViewModel: GameViewModel = viewModel()) {
             }
         }
 
-        GameStatus(score = 0, modifier = Modifier.padding(20.dp))
+        GameStatus(score = gameUiState.score, modifier = Modifier.padding(20.dp))
     }
 }
 
@@ -136,11 +137,13 @@ fun GameStatus(score: Int, modifier: Modifier = Modifier) {
 
 @Composable
 fun GameLayout(      currentScrambledWord: String,
+                     wordCount: Int,
                      isGuessWrong: Boolean,
                      userGuess: String,
                      onUserGuessChanged: (String) -> Unit,
                      onKeyboardDone: () -> Unit,
-                     modifier: Modifier = Modifier) {
+                     modifier: Modifier = Modifier)
+{
     val mediumPadding = dimensionResource(R.dimen.padding_medium)
 
     Card(
@@ -156,9 +159,10 @@ fun GameLayout(      currentScrambledWord: String,
                     .background(colorScheme.surfaceTint)
                     .padding(horizontal = 10.dp, vertical = 4.dp)
                     .align(alignment = Alignment.End),
-                text = stringResource(R.string.word_count, 0),
+                text = stringResource(R.string.word_count, wordCount),
                 style = typography.titleMedium,
-                color = colorScheme.onPrimary
+                color = colorScheme.onPrimary,
+
             )
             Text(
                 text = "scrambleun",
